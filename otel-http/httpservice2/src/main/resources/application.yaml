@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: "http-service2"
+
+server:
+  port: 8081
