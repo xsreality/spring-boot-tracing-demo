@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: "http-service1"
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.cloud.sleuth: DEBUG
+    io.opentelemetry: DEBUG
