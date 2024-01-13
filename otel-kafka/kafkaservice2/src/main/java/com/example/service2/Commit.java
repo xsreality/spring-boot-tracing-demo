@@ -1,8 +1,8 @@
 package com.example.service2;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
 @Entity
 public class Commit {
@@ -40,8 +40,8 @@ public class Commit {
     @Override
     public String toString() {
         return "Commit{" +
-                "id=" + id +
-                ", commitMessage='" + commitMessage + '\'' +
-                '}';
+               "id=" + id +
+               ", commitMessage='" + commitMessage + '\'' +
+               '}';
     }
 }

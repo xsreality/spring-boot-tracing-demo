@@ -25,7 +25,7 @@ public class HomeController {
     @RequestMapping("/")
     String service1() {
         log.info("Hit service 1!");
-        String commitMsg = restTemplate.getForObject("http://whatthecommit.com/index.txt", String.class);
+        String commitMsg = restTemplate.getForObject("https://whatthecommit.com/index.txt", String.class);
         this.kafkaTemplate.setProducerListener(new ProducerListener<>() {
             @Override
             public void onSuccess(ProducerRecord<String, String> producerRecord, RecordMetadata recordMetadata) {
