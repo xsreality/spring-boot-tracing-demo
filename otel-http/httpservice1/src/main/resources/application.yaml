@@ -7,5 +7,5 @@ server:
 
 logging:
   level:
-    org.springframework.cloud.sleuth: DEBUG
-    io.opentelemetry: DEBUG
+    io.opentelemetry: TRACE
+    io.micrometer: DEBUG
