@@ -9,21 +9,27 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.MicrometerProducerListener;
 import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import io.micrometer.core.instrument.MeterRegistry;
 
 @EnableKafka
 @Configuration
 public class TracingProducerConfig {
 
     private final KafkaProperties kafkaProperties;
+    private final MeterRegistry meterRegistry;
 
-    public TracingProducerConfig(KafkaProperties kafkaProperties) {
+    public TracingProducerConfig(KafkaProperties kafkaProperties, MeterRegistry meterRegistry) {
         this.kafkaProperties = kafkaProperties;
+        this.meterRegistry = meterRegistry;
     }
 
+    @SuppressWarnings("resource")
     @Bean
     public Map<String, Object> producerConfigs(SslBundles sslBundles) {
         Map<String, Object> props = new HashMap<>(kafkaProperties.buildProducerProperties(sslBundles));
@@ -37,7 +43,9 @@ public class TracingProducerConfig {
 
     @Bean
     public ProducerFactory<String, String> producerFactory(SslBundles sslBundles) {
-        return new DefaultKafkaProducerFactory<>(producerConfigs(sslBundles));
+        final ProducerFactory<String, String> factory = new DefaultKafkaProducerFactory<>(producerConfigs(sslBundles));
+        factory.addListener(new MicrometerProducerListener<>(meterRegistry)); // adds native Kafka producer metrics
+        return factory;
     }
 
     @Bean

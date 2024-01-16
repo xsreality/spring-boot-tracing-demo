@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
+
 @SpringBootApplication
 public class HttpService1Application {
 
@@ -28,14 +31,24 @@ public class HttpService1Application {
 class MyService {
 
     private final RestTemplate restTemplate;
+    private final ObservationRegistry registry;
 
-
-    MyService(RestTemplate restTemplate) {
+    MyService(RestTemplate restTemplate, ObservationRegistry registry) {
         this.restTemplate = restTemplate;
+        this.registry = registry;
     }
 
     String callService2() {
-        return this.restTemplate.getForObject("http://localhost:8081", String.class);
+        var observation = Observation.createNotStarted("call-service2", registry).start();
+        try (var ignored = observation.openScope()) {
+            String commitMsg = this.restTemplate.getForObject("http://localhost:8081", String.class);
+            //noinspection DataFlowIssue
+            observation.highCardinalityKeyValue("commit.message", commitMsg);
+            return commitMsg;
+        } finally {
+            observation.stop();
+        }
+
     }
 }
 

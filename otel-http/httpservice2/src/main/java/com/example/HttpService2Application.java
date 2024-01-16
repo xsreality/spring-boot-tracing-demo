@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
+
 @SpringBootApplication
 public class HttpService2Application {
 
@@ -30,15 +33,25 @@ class FetchCommitService {
     private static final Logger log = LoggerFactory.getLogger(FetchCommitService.class);
 
     private final RestTemplate restTemplate;
+    private final ObservationRegistry registry;
 
-    FetchCommitService(RestTemplate restTemplate) {
+    FetchCommitService(RestTemplate restTemplate, ObservationRegistry registry) {
         this.restTemplate = restTemplate;
+        this.registry = registry;
     }
 
     String fetchCommit() {
-        String commitMsg = this.restTemplate.getForObject("https://whatthecommit.com/index.txt", String.class);
-        log.info(commitMsg);
-        return commitMsg;
+        var observation = Observation.createNotStarted("fetch-commit", registry).start();
+        try (var ignored = observation.openScope()) {
+            String commitMsg = this.restTemplate.getForObject("https://whatthecommit.com/index.txt", String.class);
+            //noinspection DataFlowIssue
+            observation.highCardinalityKeyValue("commit.message", commitMsg);
+            observation.event(Observation.Event.of("commit-fetched"));
+            log.info(commitMsg);
+            return commitMsg;
+        } finally {
+            observation.stop();
+        }
     }
 }
 

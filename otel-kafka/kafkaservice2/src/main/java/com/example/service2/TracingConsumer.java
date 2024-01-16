@@ -9,24 +9,36 @@ import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
+
 @Component
 public class TracingConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(TracingConsumer.class);
 
-    private final CommitService commitService;
+    private final CommitRepository repository;
+    private final ObservationRegistry registry;
 
-    public TracingConsumer(CommitService commitService) {
-        this.commitService = commitService;
+    public TracingConsumer(CommitRepository repository, ObservationRegistry registry) {
+        this.repository = repository;
+        this.registry = registry;
     }
 
     @KafkaListener(topics = "tracing-demo")
     public void listen(@Payload String message, ConsumerRecord<String, String> record) {
-        long now = System.currentTimeMillis();
-        log.info("Message is '{}'. Received message on topic {} partition {} offset {} header {} key '{}' value '{}'. Time to consume {} ms",
-                record.value(), record.topic(), record.partition(), record.offset(),
-                record.headers(), record.key(), message, now - record.timestamp());
-        commitService.save(new Commit(new Random().nextLong(), record.value()));
-        log.info("Commit message is '{}'", record.value());
+        var observation = Observation.createNotStarted("consume-commit-event", registry).start();
+        try (var ignored = observation.openScope()) {
+            long now = System.currentTimeMillis();
+            log.info("Message is '{}'. Received message on topic {} partition {} offset {} header {} key '{}' value '{}'. Time to consume {} ms",
+                    record.value(), record.topic(), record.partition(), record.offset(),
+                    record.headers(), record.key(), message, now - record.timestamp());
+            repository.save(new Commit(new Random().nextLong(), record.value()));
+            observation.highCardinalityKeyValue("commit.message", record.value());
+            observation.event(Observation.Event.of("event-consumed"));
+            log.info("Commit message is '{}'", record.value());
+        } finally {
+            observation.stop();
+        }
     }
 }

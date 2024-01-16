@@ -10,20 +10,26 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.MicrometerConsumerListener;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import io.micrometer.core.instrument.MeterRegistry;
 
 @Configuration
 public class TracingConsumerConfig {
 
     private final KafkaProperties kafkaProperties;
+    private final MeterRegistry meterRegistry;
 
     @Autowired
-    public TracingConsumerConfig(KafkaProperties kafkaProperties) {
+    public TracingConsumerConfig(KafkaProperties kafkaProperties, MeterRegistry meterRegistry) {
         this.kafkaProperties = kafkaProperties;
+        this.meterRegistry = meterRegistry;
     }
 
+    @SuppressWarnings("resource")
     @Bean
     public Map<String, Object> consumerConfigs(SslBundles sslBundles) {
         Map<String, Object> props = new HashMap<>(kafkaProperties.buildConsumerProperties(sslBundles));
@@ -36,7 +42,9 @@ public class TracingConsumerConfig {
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory(SslBundles sslBundles) {
-        return new DefaultKafkaConsumerFactory<>(consumerConfigs(sslBundles));
+        ConsumerFactory<String, String> factory = new DefaultKafkaConsumerFactory<>(consumerConfigs(sslBundles));
+        factory.addListener(new MicrometerConsumerListener<>(meterRegistry)); // adds native Kafka consumer metrics
+        return factory;
     }
 
     @Bean
