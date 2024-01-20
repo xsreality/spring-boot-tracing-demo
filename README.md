@@ -59,4 +59,4 @@ Make a curl request to Service 1: `curl http://localhost:8080`.
 
 Access Jaeger UI at http://localhost:16686
 
-TODO: Add Jaeger screenshot
+![image](https://github.com/xsreality/spring-boot-tracing-demo/assets/4991449/d61a2ff6-2869-451c-9f30-1f758e71e745)
