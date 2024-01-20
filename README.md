@@ -21,9 +21,9 @@ There are 2 tracing scenarios - HTTP and Apache Kafka
 3. Kafka Consumer consumes the message from Apache Kafka.
 4. After consumption, Kafka Consumer store the record in H2 in-memory DB.
 
-## Start Zipkin
+## Start Jaeger
 
-Run below command to start Zipkin.
+Run below command to start Jaeger.
 
 ```bash
 docker run --rm --name jaeger \
