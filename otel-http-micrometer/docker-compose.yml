@@ -2,7 +2,7 @@
 version: "3.8"
 services:
   httpservice1:
-    image: "httpservice1:0.0.1-SNAPSHOT"
+    image: "httpservice1-micrometer:0.0.1-SNAPSHOT"
     depends_on:
       - jaeger
     ports:
@@ -12,7 +12,7 @@ services:
       - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://jaeger:4318/v1/traces
 
   httpservice2:
-    image: "httpservice2:0.0.1-SNAPSHOT"
+    image: "httpservice2-micrometer:0.0.1-SNAPSHOT"
     depends_on:
       - jaeger
     ports:

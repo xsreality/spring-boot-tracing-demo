@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>httpservice1-micrometer</module>
-        <module>httpservice2-micrometer</module>
+        <module>httpservice1-otel</module>
+        <module>httpservice2-otel</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -15,12 +15,13 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>otel-http-micrometer</artifactId>
+    <artifactId>otel-http-opentelemetry</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>otel-http-micrometer</name>
+    <name>otel-http-opentelemetry</name>
     <description>Distributed Tracing Demo with OpenTelemetry for apps communicating over HTTP</description>
     <properties>
         <java.version>21</java.version>
+        <opentelemetry-instrumentation-annotations.version>1.32.0</opentelemetry-instrumentation-annotations.version>
     </properties>
     <dependencies>
         <dependency>
@@ -32,20 +33,13 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-otlp</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-instrumentation-annotations</artifactId>
+            <version>${opentelemetry-instrumentation-annotations.version}</version>
         </dependency>
     </dependencies>
 
@@ -58,9 +52,11 @@
                     <image>
                         <buildpacks>
                             <buildpack>paketo-buildpacks/java</buildpack>
+                            <buildpack>paketobuildpacks/opentelemetry</buildpack>
                         </buildpacks>
                         <builder>dashaun/builder:tiny</builder> <!-- paketo images do not support ARM -->
                         <env>
+                            <BP_OPENTELEMETRY_ENABLED>true</BP_OPENTELEMETRY_ENABLED>
                             <BPL_JAVA_NMT_ENABLED>false</BPL_JAVA_NMT_ENABLED>
                             <BP_SPRING_CLOUD_BINDINGS_DISABLED>true</BP_SPRING_CLOUD_BINDINGS_DISABLED>
                         </env>

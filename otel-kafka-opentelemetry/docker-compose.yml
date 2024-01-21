@@ -2,7 +2,7 @@
 version: "3.8"
 services:
   kafkaservice1:
-    image: "kafkaservice1-micrometer:0.0.1-SNAPSHOT"
+    image: "kafkaservice1-otel:0.0.1-SNAPSHOT"
     depends_on:
       - jaeger
       - kafka
@@ -10,17 +10,27 @@ services:
       - "8080:8080"
     environment:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
-      - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://jaeger:4318/v1/traces
+      - OTEL_JAVAAGENT_ENABLED=true
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_SERVICE_NAME=kafka-service1
 
   kafkaservice2:
-    image: "kafkaservice2-micrometer:0.0.1-SNAPSHOT"
+    image: "kafkaservice2-otel:0.0.1-SNAPSHOT"
     depends_on:
       - jaeger
       - kafka
     environment:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_KAFKA_CONSUMER_GROUP-ID=com.example.tracing-demo
-      - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://jaeger:4318/v1/traces
+      - OTEL_JAVAAGENT_ENABLED=true
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_SERVICE_NAME=kafka-service2
 
   jaeger:
     image: jaegertracing/all-in-one:1.53
