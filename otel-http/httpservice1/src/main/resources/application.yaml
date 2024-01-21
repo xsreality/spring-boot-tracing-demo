@@ -5,6 +5,9 @@ spring:
 server:
   port: 8080
 
+httpservice2:
+  endpoint: "http://localhost:8081"
+
 management:
   tracing:
     sampling:

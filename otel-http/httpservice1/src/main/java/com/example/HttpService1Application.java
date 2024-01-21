@@ -2,6 +2,7 @@ package com.example;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -33,6 +34,9 @@ class MyService {
     private final RestTemplate restTemplate;
     private final ObservationRegistry registry;
 
+    @Value("${httpservice2.endpoint}")
+    private String httpService2Endpoint;
+
     MyService(RestTemplate restTemplate, ObservationRegistry registry) {
         this.restTemplate = restTemplate;
         this.registry = registry;
@@ -41,7 +45,7 @@ class MyService {
     String callService2() {
         var observation = Observation.createNotStarted("call-service2", registry).start();
         try (var ignored = observation.openScope()) {
-            String commitMsg = this.restTemplate.getForObject("http://localhost:8081", String.class);
+            String commitMsg = this.restTemplate.getForObject(httpService2Endpoint, String.class);
             //noinspection DataFlowIssue
             observation.highCardinalityKeyValue("commit.message", commitMsg);
             return commitMsg;

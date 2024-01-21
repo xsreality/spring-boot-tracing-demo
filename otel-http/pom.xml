@@ -54,6 +54,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <buildpacks>
+                            <buildpack>paketo-buildpacks/java</buildpack>
+                        </buildpacks>
+                        <builder>dashaun/builder:tiny</builder> <!-- paketo images do not support ARM -->
+                        <env>
+                            <BPL_JAVA_NMT_ENABLED>false</BPL_JAVA_NMT_ENABLED>
+                            <BP_SPRING_CLOUD_BINDINGS_DISABLED>true</BP_SPRING_CLOUD_BINDINGS_DISABLED>
+                        </env>
+                    </image>
+                </configuration>
             </plugin>
         </plugins>
     </build>

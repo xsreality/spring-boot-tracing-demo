@@ -1,0 +1,28 @@
+---
+version: "3.8"
+services:
+  httpservice1:
+    image: "httpservice1:0.0.1-SNAPSHOT"
+    depends_on:
+      - jaeger
+    ports:
+      - "8080:8080"
+    environment:
+      - HTTPSERVICE2_ENDPOINT=http://httpservice2:8081
+      - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://jaeger:4318/v1/traces
+
+  httpservice2:
+    image: "httpservice2:0.0.1-SNAPSHOT"
+    depends_on:
+      - jaeger
+    ports:
+      - "8081:8081"
+    environment:
+      - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://jaeger:4318/v1/traces
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.53
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"

@@ -4,7 +4,7 @@ This project is a quick example to showcase Distributed Tracing in a Spring Boot
 
 There are 2 tracing scenarios - HTTP and Apache Kafka
 
-### Services communicating over HTTP
+## Services communicating over HTTP
 
 ![image](https://user-images.githubusercontent.com/4991449/140835345-a2af5646-2488-456d-9296-7baa21b06028.png)
 
@@ -12,7 +12,64 @@ There are 2 tracing scenarios - HTTP and Apache Kafka
 2. HTTP Service 2 makes a GET call to whatthecommit.com.
 3. HTTP Service 2 returns the response from whatthecommit.com back to HTTP Service 1.
 
-### Services communicating over Apache Kafka
+### Observability with Micrometer Tracing
+
+1. Stay on the `main` branch.
+
+2. Change to `otel-http` folder: 
+    ```shell
+    cd otel-http
+    ```
+
+3. Compile and build the docker image of http services.
+    ```shell
+    mvn spring-boot:build-image
+    ```
+
+4. Run the docker-compose setup. This will start Jaeger and the HTTP services.
+    ```shell
+    docker-compose up
+    ```
+
+5. Call the httpservice1.
+    ```shell
+    curl http://localhost:8080
+    ```
+
+6. Open Jaeger at `http://localhost:16686` and check the traces.
+
+![image](https://github.com/xsreality/spring-boot-tracing-demo/assets/4991449/e72b4f61-f53e-41ee-a436-fe5536a0d3ab)
+
+### Observability with OpenTelemetry Auto Instrumentation
+
+1. Switch to `spring-boot-3-opentelemetry` branch.
+
+2. Change to `otel-http` folder:
+    ```shell
+    cd otel-http
+    ```
+
+3. Compile and build the docker image of http services.
+    ```shell
+    mvn spring-boot:build-image
+    ```
+
+4. Run the docker-compose setup. This will start Jaeger and the HTTP services.
+    ```shell
+    docker-compose up
+    ```
+
+5. Call the httpservice1.
+    ```shell
+    curl http://localhost:8080
+    ```
+
+6. Open Jaeger at `http://localhost:16686` and check the traces.
+
+![image](https://github.com/xsreality/spring-boot-tracing-demo/assets/4991449/2ebba88e-ace2-44f0-9f7e-4c2131ebee6c)
+
+
+## Services communicating over Apache Kafka
 
 ![image](https://user-images.githubusercontent.com/4991449/140835427-c652c835-c90c-4864-9014-fcf5a45727b7.png)
 
@@ -21,32 +78,54 @@ There are 2 tracing scenarios - HTTP and Apache Kafka
 3. Kafka Consumer consumes the message from Apache Kafka.
 4. After consumption, Kafka Consumer store the record in H2 in-memory DB.
 
-## Start Jaeger
+### Observability with Micrometer Tracing
 
-Run below command to start Jaeger.
+1. Stay on the `main` branch.
 
-```bash
-docker run --rm -d --name jaeger \
-  -p 16686:16686 \
-  -p 4318:4318 \
-  jaegertracing/all-in-one:1.53
-```
+2. Change to `otel-kafka` folder:
+    ```shell
+    cd otel-kafka
+    ```
 
-## Micrometer Tracing
+3. Compile and build the docker image of kafka services.
+    ```shell
+    mvn spring-boot:build-image
+    ```
 
-The `main` branch uses Micrometer Tracing library to instrument the codebase.
+4. Run the docker-compose setup. This will start a 1-node Kafka cluster, Jaeger and the Kafka producer/consumer services.
+    ```shell
+    docker-compose up
+    ```
 
-Build the modules with `mvn compile package`.
+5. Call the kafkaservice1.
+    ```shell
+    curl http://localhost:8080
+    ```
 
-Run `http-service1` and `http-service2` with below command at the root of the repository:
+6. Open Jaeger at `http://localhost:16686` and check the traces.
 
-```bash
-java -jar otel-http/httpservice1/target/httpservice1-0.0.1-SNAPSHOT.jar
-java -jar otel-http/httpservice2/target/httpservice2-0.0.1-SNAPSHOT.jar
-```
+### Observability with OpenTelemetry Auto Instrumentation
 
-Make a curl request to Service 1: `curl http://localhost:8080`.
+1. Switch to `spring-boot-3-opentelemetry` branch.
 
-Access Jaeger UI at http://localhost:16686
+2. Change to `otel-kafka` folder:
+    ```shell
+    cd otel-kafka
+    ```
 
-![image](https://github.com/xsreality/spring-boot-tracing-demo/assets/4991449/d61a2ff6-2869-451c-9f30-1f758e71e745)
+3. Compile and build the docker image of http services.
+    ```shell
+    mvn spring-boot:build-image
+    ```
+
+4. Run the docker-compose setup. This will start a 1-node Kafka cluster, Jaeger and the Kafka producer/consumer services.
+    ```shell
+    docker-compose up
+    ```
+
+5. Call the kafkaservice1.
+    ```shell
+    curl http://localhost:8080
+    ```
+
+6. Open Jaeger at `http://localhost:16686` and check the traces.
