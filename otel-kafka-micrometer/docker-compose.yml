@@ -2,7 +2,7 @@
 version: "3.8"
 services:
   kafkaservice1:
-    image: "kafkaservice1:0.0.1-SNAPSHOT"
+    image: "kafkaservice1-micrometer:0.0.1-SNAPSHOT"
     depends_on:
       - jaeger
       - kafka
@@ -13,7 +13,7 @@ services:
       - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://jaeger:4318/v1/traces
 
   kafkaservice2:
-    image: "kafkaservice2:0.0.1-SNAPSHOT"
+    image: "kafkaservice2-micrometer:0.0.1-SNAPSHOT"
     depends_on:
       - jaeger
       - kafka
