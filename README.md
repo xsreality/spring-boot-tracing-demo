@@ -104,6 +104,8 @@ There are 2 tracing scenarios - HTTP and Apache Kafka
 
 6. Open Jaeger at `http://localhost:16686` and check the traces.
 
+![image](https://github.com/xsreality/spring-boot-tracing-demo/assets/4991449/f94a0057-e5d3-4cb7-8205-325168c0212a)
+
 ### Observability with OpenTelemetry Auto Instrumentation
 
 1. Switch to `spring-boot-3-opentelemetry` branch.
@@ -129,3 +131,5 @@ There are 2 tracing scenarios - HTTP and Apache Kafka
     ```
 
 6. Open Jaeger at `http://localhost:16686` and check the traces.
+
+![image](https://github.com/xsreality/spring-boot-tracing-demo/assets/4991449/ae44bf63-1fff-4284-990f-865891e5c5d2)
