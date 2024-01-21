@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>httpservice1</module>
-        <module>httpservice2</module>
+        <module>kafkaservice1</module>
+        <module>kafkaservice2</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -15,10 +15,12 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>otel-http</artifactId>
+    <artifactId>otel-kafka-micrometer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>otel-http</name>
-    <description>Distributed Tracing Demo with OpenTelemetry for apps communicating over HTTP</description>
+    <name>otel-kafka-micrometer</name>
+    <description>Distributed Tracing Demo with OpenTelemetry for apps communicating over Apache
+        Kafka
+    </description>
     <properties>
         <java.version>21</java.version>
     </properties>
@@ -29,11 +31,15 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-otlp</artifactId>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
@@ -44,8 +50,18 @@
             <artifactId>micrometer-tracing-bridge-otel</artifactId>
         </dependency>
         <dependency>
+            <groupId>net.ttddyy.observation</groupId>
+            <artifactId>datasource-micrometer-spring-boot</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
