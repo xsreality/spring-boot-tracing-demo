@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: "http-service1"
+
+server:
+  port: 8080
+
+httpservice2:
+  endpoint: "http://localhost:8081"
+
+logging:
+  level:
+    io.opentelemetry: TRACE

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <modules>
+        <module>httpservice1-otel-native</module>
+        <module>httpservice2-otel-native</module>
+    </modules>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.example</groupId>
+    <artifactId>otel-http-opentelemetry-native</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>otel-http-opentelemetry-native</name>
+    <description>Distributed Tracing Demo with OpenTelemetry for apps communicating over HTTP</description>
+    <properties>
+        <java.version>21</java.version>
+        <opentelemetry-bom.version>1.34.1</opentelemetry-bom.version>
+        <opentelemetry-instrumentation-bom-alpha.version>2.0.0-alpha</opentelemetry-instrumentation-bom-alpha.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-instrumentation-annotations</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom</artifactId>
+                <version>${opentelemetry-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry.instrumentation</groupId>
+                <artifactId>opentelemetry-instrumentation-bom-alpha</artifactId>
+                <version>${opentelemetry-instrumentation-bom-alpha.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <buildpacks>
+                            <buildpack>paketo-buildpacks/java-native-image</buildpack>
+                        </buildpacks>
+                        <builder>dashaun/builder:tiny</builder> <!-- paketo images do not support ARM -->
+                        <env>
+                            <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+                            <BPL_JAVA_NMT_ENABLED>false</BPL_JAVA_NMT_ENABLED>
+                            <BP_SPRING_CLOUD_BINDINGS_DISABLED>true</BP_SPRING_CLOUD_BINDINGS_DISABLED>
+                        </env>
+                    </image>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

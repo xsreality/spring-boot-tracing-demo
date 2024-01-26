@@ -1,0 +1,36 @@
+---
+version: "3.8"
+services:
+  httpservice1:
+    image: "httpservice1-otel-native:0.0.1-SNAPSHOT"
+    depends_on:
+      - jaeger
+    ports:
+      - "8080:8080"
+    environment:
+      - HTTPSERVICE2_ENDPOINT=http://httpservice2:8081
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=logging
+      - OTEL_SERVICE_NAME=http-service1
+
+  httpservice2:
+    image: "httpservice2-otel-native:0.0.1-SNAPSHOT"
+    depends_on:
+      - jaeger
+    ports:
+      - "8081:8081"
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=logging
+      - OTEL_SERVICE_NAME=http-service2
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.53
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
