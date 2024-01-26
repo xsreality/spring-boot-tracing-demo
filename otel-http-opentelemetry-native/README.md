@@ -38,10 +38,10 @@ The `opentelemetry-spring-boot-starter` dependency enables auto instrumentation 
 
 ### Building Application and Docker Images
 
-Run below command to compile and build the docker images with Paketo buildpacks.
+Run below command to compile and build the docker images with Paketo buildpacks. Ensure you have GraalVM Java SDK deployed.
 
 ```shell
-mvn spring-boot:build-image
+mvn spring-boot:build-image -Pnative
 ```
 
 ### Run Docker Compose setup
