@@ -2,6 +2,8 @@
 
 This project is a quick example to showcase Distributed Tracing in a Spring Boot application using Micrometer and OpenTelemetry.
 
+Read the accomanying blog post - [Distributed Tracing with Spring Boot 3 - Micrometer vs OpenTelemetry](https://itnext.io/distributed-tracing-with-spring-boot-3-micrometer-vs-opentelemetry-b3593546f61b?sk=d248c1121df43e7884d2e9779e508b79)
+
 There are 2 tracing scenarios - HTTP and Apache Kafka.
 
 ## Services communicating over HTTP
