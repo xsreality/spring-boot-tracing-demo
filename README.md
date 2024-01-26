@@ -2,6 +2,8 @@
 
 This project is a quick example to showcase Distributed Tracing in a Spring Boot application using Micrometer and OpenTelemetry.
 
+Read the accomanying blog post - [Distributed Tracing with Spring Boot 3 - Micrometer vs OpenTelemetry](https://itnext.io/distributed-tracing-with-spring-boot-3-micrometer-vs-opentelemetry-b3593546f61b?sk=d248c1121df43e7884d2e9779e508b79)
+
 There are 2 tracing scenarios - HTTP and Apache Kafka.
 
 ## Services communicating over HTTP
@@ -30,5 +32,7 @@ For each scenario, there are two implementations - Micrometer Tracing and OpenTe
 3. The folder [otel-kafka-micrometer](https://github.com/xsreality/spring-boot-tracing-demo/tree/main/otel-kafka-micrometer) demonstrates Micrometer tracing of Kafka services communication.
 4. The folder [otel-kafka-opentelemetry](https://github.com/xsreality/spring-boot-tracing-demo/tree/main/otel-kafka-opentelemetry) demonstrates OTEL Auto Instrumentation tracing of Kafka services communication.
 5. The folder [otel-http-micrometer-native](https://github.com/xsreality/spring-boot-tracing-demo/tree/main/otel-http-micrometer-native) demonstrates Micromter tracing of HTTP services communication with Spring native GraalVM.
+6. The folder [otel-http-opentelemetry-native](https://github.com/xsreality/spring-boot-tracing-demo/tree/main/otel-http-opentelemetry-native) demonstrates OTEL tracing of HTTP services communication with Spring native GraalVM without using the Java agent.
+7. The folder [otel-kafka-opentelemetry-native](https://github.com/xsreality/spring-boot-tracing-demo/tree/main/otel-kafka-opentelemetry-native) demonstrates OTEL tracing of Kafka and DB services communication with Spring native GraalVM without using the Java agent.
 
 Visit the folder to get more details about building and running the application.
