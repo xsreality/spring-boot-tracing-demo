@@ -81,10 +81,10 @@ The producer is instrumented by creating a custom ProducerFactory that _wraps_ t
 
 ### Building Application and Docker Images
 
-Run below command to compile and build the docker images with Paketo buildpacks.
+Run below command to compile and build the docker images with Paketo buildpacks. Ensure you have GraalVM Java SDK deployed.
 
 ```shell
-mvn spring-boot:build-image
+mvn spring-boot:build-image -Pnative
 ```
 
 ### Run Docker Compose setup
@@ -105,4 +105,4 @@ curl http://localhost:8080
 
 Open Jaeger at `http://localhost:16686` and check the traces.
 
-![image](https://github.com/xsreality/spring-boot-tracing-demo/assets/4991449/ae44bf63-1fff-4284-990f-865891e5c5d2)
+![image](https://github.com/xsreality/spring-boot-tracing-demo/assets/4991449/15e5abd4-e5a8-450c-b630-f7b84624e969)
