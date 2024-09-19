@@ -7,6 +7,12 @@ version: 2
 updates:
   - package-ecosystem: "maven" # See documentation for possible values
     directories:
-      - "**/*"
+      - "/otel-http-micrometer-native"
+      - "/otel-http-micrometer"
+      - "/otel-http-opentelemetry-native"
+      - "/otel-http-opentelemetry"
+      - "/otel-kafka-micrometer"
+      - "/otel-kafka-opentelemetry-native"
+      - "otel-kafka-opentelemetry"
     schedule:
       interval: "daily"
