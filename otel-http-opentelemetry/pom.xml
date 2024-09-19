@@ -21,7 +21,7 @@
     <description>Distributed Tracing Demo with OpenTelemetry for apps communicating over HTTP</description>
     <properties>
         <java.version>21</java.version>
-        <opentelemetry-instrumentation-annotations.version>1.32.0</opentelemetry-instrumentation-annotations.version>
+        <opentelemetry-instrumentation-annotations.version>2.8.0</opentelemetry-instrumentation-annotations.version>
     </properties>
     <dependencies>
         <dependency>
